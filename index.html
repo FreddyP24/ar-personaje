@@ -8,10 +8,37 @@
 <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
 
 <style>
-body { margin:0; font-family: Arial; text-align:center; background:#111; color:white; }
-#menu { position:absolute; width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; }
-button { padding:15px 25px; margin:10px; font-size:18px; border:none; border-radius:8px; background:#00bcd4; color:white; }
-#stopBtn { position:absolute; bottom:20px; left:50%; transform:translateX(-50%); display:none; z-index:3; }
+body { margin:0; font-family: Arial; background:#111; color:white; text-align:center; }
+
+#menu {
+  position:absolute;
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  z-index:2;
+}
+
+button {
+  padding:15px 25px;
+  margin:10px;
+  font-size:18px;
+  border:none;
+  border-radius:8px;
+  background:#00bcd4;
+  color:white;
+}
+
+#stopBtn {
+  position:absolute;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  display:none;
+  z-index:3;
+}
 </style>
 </head>
 
@@ -27,11 +54,9 @@ button { padding:15px 25px; margin:10px; font-size:18px; border:none; border-rad
 <div id="arContainer"></div>
 
 <script>
-let stream = null;
-
 function startAR(){
-  document.getElementById('menu').style.display='none';
-  document.getElementById('stopBtn').style.display='block';
+  document.getElementById('menu').style.display = 'none';
+  document.getElementById('stopBtn').style.display = 'block';
 
   document.getElementById('arContainer').innerHTML = `
   <a-scene embedded arjs>
@@ -45,26 +70,19 @@ function startAR(){
   </a-scene>`;
 
   setTimeout(()=>{
-    let modelo = document.querySelector('#modelo');
-    modelo.addEventListener('model-loaded', function () {
-      this.setAttribute('animation-mixer', 'clip: Saludo; loop: repeat; timeScale: 1');
-    });
-  },1000);
-
-  
-  navigator.mediaDevices.getUserMedia({video:true}).then(s => { stream = s; });
+    const modelo = document.querySelector('#modelo');
+    if(modelo){
+      modelo.addEventListener('model-loaded', function () {
+        this.setAttribute('animation-mixer', 'clip: Saludo; loop: repeat; timeScale: 1');
+      });
+    }
+  }, 1000);
 }
 
 function stopAR(){
-  document.getElementById('arContainer').innerHTML = "";
-  document.getElementById('stopBtn').style.display='none';
-  document.getElementById('menu').style.display='flex';
-
-  // Apagar cámara
-  if(stream){
-    stream.getTracks().forEach(track => track.stop());
-    stream = null;
-  }
+  document.getElementById('arContainer').innerHTML = ""; 
+  document.getElementById('stopBtn').style.display = 'none';
+  document.getElementById('menu').style.display = 'flex';
 }
 </script>
 
