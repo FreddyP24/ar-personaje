@@ -1,89 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
-
-<style>
-body { margin:0; font-family: Arial; background:#111; color:white; text-align:center; }
-
-#menu {
-  position:absolute;
-  width:100%;
-  height:100%;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  z-index:2;
-}
-
-button {
-  padding:15px 25px;
-  margin:10px;
-  font-size:18px;
-  border:none;
-  border-radius:8px;
-  background:#00bcd4;
-  color:white;
-}
-
-#stopBtn {
-  position:absolute;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%);
-  display:none;
-  z-index:3;
-}
-</style>
 </head>
 
-<body>
+<body style="margin: 0; overflow: hidden;">
+<a-scene embedded arjs>
 
-<div id="menu">
-  <h1>Bienvenido a mi experiencia de Realidad Aumentada</h1>
-  <button onclick="startAR()">Iniciar AR</button>
-</div>
+  <a-marker preset="hiro">
+    <a-entity id="modelo"
+      gltf-model="https://raw.githubusercontent.com/FreddyP24/ar-personaje/main/freddy_2_0.glb"
+      scale="0.5 0.5 0.5">
+    </a-entity>
+  </a-marker>
 
-<button id="stopBtn" onclick="stopAR()">Detener AR</button>
-
-<div id="arContainer"></div>
+  <a-entity camera></a-entity>
+</a-scene>
 
 <script>
-function startAR(){
-  document.getElementById('menu').style.display = 'none';
-  document.getElementById('stopBtn').style.display = 'block';
-
-  document.getElementById('arContainer').innerHTML = `
-  <a-scene embedded arjs>
-    <a-marker preset="hiro">
-      <a-entity id="modelo"
-        gltf-model="https://raw.githubusercontent.com/FreddyP24/ar-personaje/main/freddy_2_0.glb"
-        scale="0.5 0.5 0.5">
-      </a-entity>
-    </a-marker>
-    <a-entity camera></a-entity>
-  </a-scene>`;
-
-  setTimeout(()=>{
-    const modelo = document.querySelector('#modelo');
-    if(modelo){
-      modelo.addEventListener('model-loaded', function () {
-        this.setAttribute('animation-mixer', 'clip: Saludo; loop: repeat; timeScale: 1');
-      });
-    }
-  }, 1000);
-}
-
-function stopAR(){
-  document.getElementById('arContainer').innerHTML = ""; 
-  document.getElementById('stopBtn').style.display = 'none';
-  document.getElementById('menu').style.display = 'flex';
-}
+document.querySelector('#modelo').addEventListener('model-loaded', function () {
+  this.setAttribute('animation-mixer', 'clip: Saludo; loop: repeat; timeScale: 1');
+});
 </script>
 
 </body>
