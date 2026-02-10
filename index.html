@@ -27,6 +27,8 @@ button { padding:15px 25px; margin:10px; font-size:18px; border:none; border-rad
 <div id="arContainer"></div>
 
 <script>
+let stream = null;
+
 function startAR(){
   document.getElementById('menu').style.display='none';
   document.getElementById('stopBtn').style.display='block';
@@ -43,16 +45,26 @@ function startAR(){
   </a-scene>`;
 
   setTimeout(()=>{
-    document.querySelector('#modelo').addEventListener('model-loaded', function () {
+    let modelo = document.querySelector('#modelo');
+    modelo.addEventListener('model-loaded', function () {
       this.setAttribute('animation-mixer', 'clip: Saludo; loop: repeat; timeScale: 1');
     });
   },1000);
+
+  
+  navigator.mediaDevices.getUserMedia({video:true}).then(s => { stream = s; });
 }
 
 function stopAR(){
   document.getElementById('arContainer').innerHTML = "";
   document.getElementById('stopBtn').style.display='none';
   document.getElementById('menu').style.display='flex';
+
+  // Apagar cámara
+  if(stream){
+    stream.getTracks().forEach(track => track.stop());
+    stream = null;
+  }
 }
 </script>
 
